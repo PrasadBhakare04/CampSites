@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Review = require('./review');
 const Schema = mongoose.Schema;//due to this on line 4 we are using Schema({}) instead of mongoose.Schema({})
 
 const campgroundSchema = new Schema({
@@ -6,8 +7,24 @@ const campgroundSchema = new Schema({
     image: String,
     price: Number,
     description: String,
-    location: String
+    location: String,
+    reviews: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Review'
+        }
+    ]
 });
 
-const Campground = new mongoose.model('Campgrond', campgroundSchema);
+campgroundSchema.post('findOneAndDelete', async function (doc) {
+    if (doc) {
+        await Review.deleteMany({
+            _id: {
+                $in: doc.reviews
+            }
+        })
+    }
+})
+
+const Campground = new mongoose.model('Campground', campgroundSchema);
 module.exports = Campground;
