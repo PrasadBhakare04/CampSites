@@ -1,7 +1,8 @@
 const Campground = require('./models/campground');
+const { campGroundSchema, reviewSchema } = require('./validateSchemas');
 const ExpressError = require('./Utils/ExpressError');
 
-const isLoggedIn = function (req, res, next) {
+module.exports.isLoggedIn = function (req, res, next) {
     if (!req.isAuthenticated()) {
         req.session.returnTo = req.originalUrl;
         req.flash('error', 'You must login first !');
@@ -12,14 +13,14 @@ const isLoggedIn = function (req, res, next) {
     }
 }
 
-const storeReturnTo = (req, res, next) => {
+module.exports.storeReturnTo = (req, res, next) => {
     if (req.session.returnTo) {
         res.locals.returnTo = req.session.returnTo;
     }
     next();
 }
 
-const isAuthor = async function (req, res, next) {
+module.exports.isAuthor = async function (req, res, next) {
     const { id } = req.params;
     const campground = await Campground.findById(id);
     if (!req.user || !campground.author.equals(req.user._id)) {
@@ -29,7 +30,7 @@ const isAuthor = async function (req, res, next) {
     next();
 }
 
-const validateSchema = function (req, res, next) {
+module.exports.validateSchema = function (req, res, next) {
     const { error } = campGroundSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(",");
@@ -40,8 +41,14 @@ const validateSchema = function (req, res, next) {
     }
 }
 
-module.exports.validateSchema = validateSchema;
-module.exports.isAuthor = isAuthor;
-module.exports.storeReturnTo = storeReturnTo;
-module.exports.isLoggedIn = isLoggedIn;
-
+module.exports.validateReview = function (req, res, next) {
+    const { error } = reviewSchema.validate(req.body);
+    if (error) {
+        console.log(error);
+        const msg = error.details.map(el => el.message).join(",");
+        throw new ExpressError(msg, 400);
+    }
+    else {
+        next();
+    }
+}
