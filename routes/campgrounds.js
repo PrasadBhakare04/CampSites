@@ -2,22 +2,12 @@ const express = require('express');
 const catchAsync = require('../Utils/catchAsync');
 const AppError = require('../Utils/ExpressError');
 const Campground = require('../models/campground');
-const { campGroundSchema } = require('../validateSchemas.js');
 const passport = require('passport');
-const { isLoggedIn, isAuthor } = require('../middleware.js');
+const { isLoggedIn, isAuthor, validateSchema } = require('../middleware.js');
 
 const router = express.Router();
 
-const validateSchema = function (req, res, next) {
-    const { error } = campGroundSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(",");
-        throw new ExpressError(msg, 400);
-    }
-    else {
-        next();
-    }
-}
+
 
 router.get('', catchAsync(async (req, res) => {
     const campgrounds = await Campground.find({});
