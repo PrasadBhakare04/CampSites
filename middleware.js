@@ -1,3 +1,5 @@
+const Campground = require('./models/campground');
+
 const isLoggedIn = function (req, res, next) {
     if (!req.isAuthenticated()) {
         req.session.returnTo = req.originalUrl;
@@ -16,6 +18,17 @@ const storeReturnTo = (req, res, next) => {
     next();
 }
 
+const isAuthor = async function (req, res, next) {
+    const { id } = req.params;
+    const campground = await Campground.findById(id);
+    if (req.user && req.user._id === campground.author._id) {
+        return next();
+    }
+    req.flash('error', "You are not authorized to do that !");
+    res.redirect(`/campground/${id}`)
+}
+
+module.exports.isAuthor = isAuthor;
 module.exports.storeReturnTo = storeReturnTo;
 module.exports.isLoggedIn = isLoggedIn;
 
