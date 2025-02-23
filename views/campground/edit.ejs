@@ -1,8 +1,9 @@
 <% layout('layouts/boilerplate')%>
-    <div class="row">
+    <div class="row mt-3">
         <h1 class="text-center">Edit Campground</h1>
         <div class="col-6 offset-3">
-            <form action="/campground/<%= campground._id%>?_method=PUT" method="POST" novalidate class="validated-form">
+            <form action="/campground/<%= campground._id%>?_method=PUT" method="POST" novalidate class="validated-form"
+                enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label" for="#title">Title</label>
                     <input class="form-control" type="text" id="title" name="campground[title]"
@@ -12,11 +13,6 @@
                     <label class="form-label" for="#location">Location</label>
                     <input class="form-control" type="text" id="location" name="campground[location]"
                         value="<%=campground.location%>" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="#image">Image URL</label>
-                    <input class="form-control" type="text" id="image" name="campground[image]"
-                        value="<%=campground.image%>" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="#price">Campground Price</label>
@@ -33,9 +29,36 @@
                     </textarea>
                 </div>
                 <div class="mb-3">
+                    <div class="input-group mb-3">
+                        <input type="file" class="form-control" id="inputGroupFile02" name="image" multiple>
+                    </div>
+                    <ul id="fileList"></ul>
+                </div>
+                <div class="mb-3">
+                    <% campground.images.forEach((img, i)=> { %>
+                        <img src="<%= img.thumbnail%>" class="" alt="">
+                        <div class="form-check-inline">
+                            <input type="checkbox" name="deleteImages[]" id="image-<%=i%>" value="<%= img.filename%>">
+                        </div>
+                        <label for="image-<%=i%>">Delete</label>
+                        <% }) %>
+                </div>
+                <div class="mb-3">
                     <button type="submit" class="btn btn-info">Submit</button>
                 </div>
             </form>
             <a href="/campground/<%= campground._id%>">Back to Campground</a>
         </div>
     </div>
+    <script>
+        document.getElementById("inputGroupFile02").addEventListener("change", function (event) {
+            let fileList = document.getElementById("fileList");
+            fileList.innerHTML = ""; // Clear previous entries
+
+            Array.from(event.target.files).forEach(file => {
+                let listItem = document.createElement("li");
+                listItem.textContent = file.name;
+                fileList.appendChild(listItem);
+            });
+        });
+    </script>

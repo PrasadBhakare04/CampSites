@@ -1,40 +1,67 @@
 <% layout('layouts/boilerplate')%>
     <link rel="stylesheet" href="/stylesheets/star.css">
-    <div class="row">
+    <div class="row mt-4">
         <div class="col-6">
-            <div class="card mb-3">
-                <img src="<%= campground.image%>" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <%= campground.title%>
-                    </h5>
-                    <p class="card-text">
-                        <%= campground.description%>
-                    </p>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <%= campground.location%>
-                    </li>
-                    <li class="list-group-item text-muted">
-                        Submitted By - <%= campground.author.username%>
-                    </li>
-                    <li class="list-group-item">$<%= campground.price%>/night</li>
-                </ul>
-                <% if (currentUser && currentUser.equals(campground.author._id)) { %>
-                    <div class="card-body">
-                        <a class="card-link btn btn-info" href="/campground/<%=campground._id%>/edit">Edit</a>
-                        <form class="d-inline" action="/campground/<%=campground._id%>?_method=DELETE" method="POST">
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
-                    </div>
-                    <% } %>
-                        <div class="card-footer text-muted">
-                            2 days ago
+            <div id="carouselExample" class="carousel slide">
+                <div class="carousel-inner">
+                    <% campground.images.forEach((img, i)=> { %>
+                        <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
+                            <img src="<%= img.url%>" class="d-block w-100" alt="...">
                         </div>
+                        <% }) %>
+                            <% if(campground.images.length> 1) {%>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                                    data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                                    data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                                <% } %>
+                </div>
+
+
+
+                <div class="card mb-3">
+                    <!-- <% for (let img of campground.images) { %>
+                        <img src="<%= img.url%>" class="card-img-top" alt="...">
+                        <% } %> -->
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= campground.title%>
+                        </h5>
+                        <p class="card-text">
+                            <b>Description :</b>
+                            <%= campground.description%>
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            Location : <%= campground.location%>
+                        </li>
+                        <li class="list-group-item text-muted">
+                            Submitted By - <%= campground.author.username%>
+                        </li>
+                        <li class="list-group-item">$<%= campground.price%>/night</li>
+                    </ul>
+                    <% if (currentUser && currentUser.equals(campground.author._id)) { %>
+                        <div class="card-body">
+                            <a class="card-link btn btn-info" href="/campground/<%=campground._id%>/edit">Edit</a>
+                            <form class="d-inline" action="/campground/<%=campground._id%>?_method=DELETE"
+                                method="POST">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                        <% } %>
+                            <div class="card-footer text-muted">
+                                2 days ago
+                            </div>
+                </div>
             </div>
         </div>
-
         <div class="col-6">
             <% if (currentUser) { %>
                 <h2>Leave a Review</h2>

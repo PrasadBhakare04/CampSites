@@ -9,3 +9,8 @@
 body {
     font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
 }
+
+/* Hide scrollbar but allow scrolling */
+/* ::-webkit-scrollbar {
+    display: none;
+} */

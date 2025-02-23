@@ -1,8 +1,8 @@
 <% layout('layouts/boilerplate')%>
-    <div class="row">
+    <div class="row mt-3">
         <h1 class="text-center">New Campground</h1>
         <div class="col-6 offset-3">
-            <form action="/campground" method="POST" novalidate class="validated-form">
+            <form action="/campground" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label" for="#title">Title</label>
                     <input class="form-control" type="text" id="title" name="campground[title]" required>
@@ -10,10 +10,6 @@
                 <div class="mb-3">
                     <label class="form-label" for="#location">Location</label>
                     <input class="form-control" type="text" id="location" name="campground[location]" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" for="#image">Image URL</label>
-                    <input class="form-control" type="text" id="image" name="campground[image]" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="#price">Campground Price</label>
@@ -28,9 +24,27 @@
                     <textarea class="form-control" id="description" name="campground[description]" required></textarea>
                 </div>
                 <div class="mb-3">
+                    <div class="input-group mb-3">
+                        <input type="file" class="form-control" id="inputGroupFile02" name="image" multiple>
+                    </div>
+                    <ul id="fileList"></ul>
+                </div>
+                <div class="mb-3">
                     <button type="submit" class="btn btn-success">Submit</button>
                 </div>
             </form>
             <a href="/campground">All Campgrounds</a>
         </div>
     </div>
+    <script>
+        document.getElementById("inputGroupFile02").addEventListener("change", function (event) {
+            let fileList = document.getElementById("fileList");
+            fileList.innerHTML = ""; // Clear previous entries
+
+            Array.from(event.target.files).forEach(file => {
+                let listItem = document.createElement("li");
+                listItem.textContent = file.name;
+                fileList.appendChild(listItem);
+            });
+        });
+    </script>

@@ -2,9 +2,17 @@ const mongoose = require('mongoose');
 const Review = require('./review');
 const Schema = mongoose.Schema;//due to this on line 4 we are using Schema({}) instead of mongoose.Schema({})
 
+const imageSchema = new Schema({
+    url: String,
+    filename: String
+})
+imageSchema.virtual('thumbnail').get(function () {
+    return this.url.replace('/upload', '/upload/w_200');
+})
+
 const campgroundSchema = new Schema({
     title: String,
-    image: String,
+    images: [imageSchema],
     price: Number,
     description: String,
     location: String,
