@@ -31,6 +31,10 @@ const seedDB = async () => {
                 url: `https://picsum.photos/400?random=${Math.random()}`,
                 filename: 'image'
             },
+            geometry: {
+                type: "Point",
+                coordinates: [-113.1331, 47.0202]
+            }
         })
         await camp.save();
     }
