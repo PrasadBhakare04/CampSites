@@ -9,7 +9,6 @@ const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./Utils/ExpressError');
-const JOI = require('joi');
 const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');

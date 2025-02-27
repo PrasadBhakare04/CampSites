@@ -20,6 +20,8 @@
     "express-session": "^1.18.1",
     "git": "^0.1.5",
     "joi": "^17.13.3",
+    "JSON": "^1.0.0",
+    "mapbox": "^1.0.0-beta10",
     "method-override": "^3.0.0",
     "mongoose": "^8.9.5",
     "morgan": "^1.10.0",

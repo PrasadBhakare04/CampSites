@@ -60,6 +60,10 @@ module.exports.renderEditForm = async (req, res) => {
 };
 
 module.exports.updateCampground = async (req, res) => {
+    const geoData = await geoCoder.forwardGeocode({
+        query: req.body.campground.location,
+        limit: 1
+    }).send();
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
     const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
@@ -70,6 +74,7 @@ module.exports.updateCampground = async (req, res) => {
         }
         await campground.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
     }
+    campground.geometry = geoData.body.features[0].geometry;
     campground.save();
     req.flash('success', 'Successfully Updated the Campground');
     res.redirect(`/campground/${campground._id}`)
