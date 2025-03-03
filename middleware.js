@@ -47,7 +47,7 @@ module.exports.isLoggedIn = function (req, res, next) {
 module.exports.isAuthor = async function (req, res, next) {
     const { id } = req.params;
     const campground = await Campground.findById(id);
-    if (!campground.author.equals(req.user._id)) {
+    if (req.user.username !== 'admin' && !campground.author.equals(req.user._id)) {
         req.flash('error', "You are not authorized to do that!");
         return res.redirect(`/campground/${id}`);
     }
