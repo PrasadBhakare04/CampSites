@@ -9,13 +9,13 @@ const upload = multer({ storage });
 const router = express.Router();
 
 router.route('/')
-    .get(isLoggedIn, catchAsync(campground.index))
+    .get(catchAsync(campground.index))
     .post(isLoggedIn, upload.array('image'), validateSchema, catchAsync(campground.createCampground));
 
 router.get('/new', isLoggedIn, campground.renderNewForm);
 
 router.route('/:id')
-    .get(catchAsync(campground.showCampground))
+    .get(isLoggedIn, catchAsync(campground.showCampground))
     .put(isLoggedIn, upload.array('image'), validateSchema, catchAsync(campground.updateCampground))
     .delete(isLoggedIn, catchAsync(campground.deleteCampground));
 
