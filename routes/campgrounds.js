@@ -9,7 +9,7 @@ const upload = multer({ storage });
 const router = express.Router();
 
 router.route('/')
-    .get(catchAsync(campground.index))
+    .get(isLoggedIn, catchAsync(campground.index))
     .post(isLoggedIn, upload.array('image'), validateSchema, catchAsync(campground.createCampground));
 
 router.get('/new', isLoggedIn, campground.renderNewForm);
